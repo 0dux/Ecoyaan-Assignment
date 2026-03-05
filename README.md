@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ecoyaan Checkout Flow
 
-## Getting Started
+A simplified checkout flow built with **Next.js 16 (App Router)**, **React 19**, and **Tailwind CSS v4** — inspired by the [Ecoyaan](https://ecoyaan.com) platform.
 
-First, run the development server:
+## 🌿 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **3-Step Checkout**: Cart → Shipping Address → Payment Confirmation → Success
+- **Server-Side Rendering**: Cart data is fetched at request time using Next.js Server Components with `cache: "no-store"`
+- **Form Validation**: Client-side validation for email format, 10-digit phone, 6-digit PIN code, and required fields
+- **State Management**: React Context API persists cart data and shipping address across checkout steps
+- **Responsive Design**: Mobile-first layout that scales gracefully to desktop
+- **Mock API**: Next.js API route (`/api/cart`) simulates a backend data source
+
+## 🏗️ Architecture
+
+```
+app/
+├── api/cart/route.ts        # Mock API endpoint (GET)
+├── page.tsx                 # Home — Server Component fetching cart via SSR
+├── shipping/page.tsx        # Shipping address form with validation
+├── payment/page.tsx         # Order review & simulated payment
+├── success/page.tsx         # Order confirmation page
+├── layout.tsx               # Root layout with CheckoutProvider
+└── globals.css              # Tailwind + custom animations
+components/
+└── CartPage.tsx             # Client component for the cart UI
+lib/
+├── types.ts                 # Shared TypeScript interfaces
+└── CheckoutContext.tsx      # React Context for checkout state
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### SSR Strategy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The home page (`app/page.tsx`) is a **Server Component** that fetches data from `/api/cart` using `fetch` with `cache: "no-store"`, ensuring fresh data on every request. The fetched data is passed as props to the `CartPage` client component, which seeds the React Context on mount.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### State Management
 
-## Learn More
+A lightweight **React Context** (`CheckoutContext`) holds the `cartData` and `shippingAddress` so data persists across page navigations without external libraries. Helper methods (`getSubtotal`, `getGrandTotal`) compute derived values.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Getting Started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Install dependencies
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Start the development server
+npm run dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Layer      | Technology              |
+| ---------- | ----------------------- |
+| Framework  | Next.js 16 (App Router) |
+| UI Library | React 19                |
+| Styling    | Tailwind CSS v4         |
+| Language   | TypeScript 5            |
+| State      | React Context API       |
+
+## 📝 Design Decisions
+
+1. **App Router over Pages Router** — Leverages React Server Components for zero-JS SSR of the cart page, reducing client bundle size.
+2. **Context API over Redux/Zustand** — The checkout state is simple (cart + address); Context avoids unnecessary dependency overhead for this MVP.
+3. **Inline validation with blur triggers** — Provides immediate feedback without waiting for form submission, improving UX.
+4. **Inter font** — Clean, modern typeface that aligns with a premium eco-brand aesthetic.
