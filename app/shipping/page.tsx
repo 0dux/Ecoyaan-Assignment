@@ -2,6 +2,7 @@
 
 import { useCheckout } from "@/lib/CheckoutContext";
 import { ShippingAddress } from "@/lib/types";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -161,9 +162,16 @@ export default function ShippingPage() {
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
             href="/"
-            className="text-2xl font-bold bg-linear-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="text-2xl font-bold bg-linear-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity flex items-center gap-2"
           >
-            🌿 Ecoyaan
+            <Image
+              src="/favicon.ico"
+              alt="Ecoyaan logo"
+              width={28}
+              height={28}
+              className="inline-block"
+            />{" "}
+            Ecoyaan
           </Link>
           <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
             Step 2 of 3
